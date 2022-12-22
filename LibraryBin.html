@@ -1,0 +1,489 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="grid simple">
+      <div class="page-title">
+        <h3>
+          <span class="semi-bold">{{"Library" |translate}}</span>&nbsp;{{"Bin" |
+          translate}}
+        </h3>
+      </div>
+
+      <div class="row" ng-show="notshow">
+        <div class="col-xs-4">
+          <div class="well" class="form-group">
+            <div class="form-group">
+              <label>Current Page:</label>
+              <input
+                placeholder="page"
+                class="form-control"
+                ng-model="currentPage"
+                ng-init="currentPage = 1"
+              />
+            </div>
+            <div class="form-group">
+              <label>Page Size:</label>
+              <input
+                placeholder="Page Size"
+                class="form-control"
+                ng-model="numPerPage"
+              />
+            </div>
+            <div class="form-group">
+              <label>Total Items:</label>
+              <input
+                placeholder="Total"
+                class="form-control"
+                ng-model="pagersize"
+              />
+            </div>
+            <hr />
+            <div class="form-group">
+              <label>Dots Display:</label>
+              <input
+                placeholder="..."
+                class="form-control"
+                maxlength="3"
+                ng-model="dots"
+                ng-init="dots = '...'"
+              />
+            </div>
+
+            <hr />
+            <div class="form-group">
+              <label>UL Class:</label>
+              <input
+                placeholder="pagination"
+                class="form-control"
+                maxlength="100"
+                ng-model="ulClass"
+              />
+            </div>
+            <div class="form-group">
+              <label>Active Class:</label>
+              <input
+                placeholder="active"
+                class="form-control"
+                maxlength="100"
+                ng-model="activeClass"
+                ng-init="activeClass = 'active'"
+              />
+            </div>
+            <div class="form-group">
+              <label>Disabled Class:</label>
+              <input
+                placeholder="disabled"
+                class="form-control"
+                maxlength="100"
+                ng-model="disabledClass"
+                ng-init="disabledClass = 'disabled'"
+              />
+            </div>
+            <br />
+            <table class="table">
+              <tr>
+                <td>
+                  <label>Show Prev Next:</label>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    ng-model="showPrevNext"
+                    ng-init="showPrevNext = true"
+                  />
+                  {{showPrevNext}}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Show First Last:</label>
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    ng-model="showFirstLast"
+                    ng-init="showFirstLast = true"
+                  />
+                  {{showPrevNext}}
+                </td>
+              </tr>
+            </table>
+            <hr />
+            <span class="btn btn-default" onclick="location.reload()">
+              <span
+                title="Reset Settings"
+                class="glyphicon glyphicon-repeat"
+              ></span>
+            </span>
+            <span class="btn btn-success" ng-click="currentPage = 0">
+              Apply Settings
+            </span>
+            <br />
+            <br />
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-body no-border">
+        <div ng-show="table">
+          <div class="row form-row">
+            <div class="col-md-6">
+              <select
+                id="Select1"
+                style="width: 60px"
+                class="input-sm"
+                name="user"
+                ng-model="pagesize"
+                ng-change="size(pagesize)"
+              >
+                <option value="10" class="form-control input-sm">10</option>
+
+                <option value="20" class="form-control input-sm">20</option>
+
+                <option value="All" class="form-control input-sm">All</option>
+              </select>
+              &nbsp;
+              <button
+                class="btn btn-primary btn-small"
+                type="button"
+                id="designew"
+                ng-click="New()"
+              >
+                <span class="semi-bold">+&nbsp;</span>{{"New"| translate }}
+              </button>
+              &nbsp;
+              <button
+                class="btn btn-danger btn-small"
+                type="button"
+                ng-click="OkDelete()"
+              >
+                <span class="semi-bold"></span>{{"Delete"| translate }}
+              </button>
+            </div>
+            <div class="col-md-6">
+              <div class="pull-right">
+                <div class="dataTables_filter" id="example_filter">
+                  <!--<label>
+                                    {{"Search"| translate }}:&nbsp;
+                                    <input type="text" aria-controls="example" ng-model="search.$" class="input-medium"></label>
+                                    <input aria-controls="example" ng-model="searchText" class="k-textbox input-sm full-width"  placeholder="Search" type="search" ng-change="search()" tabindex="1" autofocus="autofocus">
+                                </label>-->
+                  <!-- <label>
+                                    {{ "Search:" | translate }} &nbsp;-->
+                  <span class="k-textbox k-space-right full-width">
+                    <input
+                      type="text"
+                      aria-controls="example"
+                      ng-model="searchText"
+                      placeholder="Bin Code/Description"
+                      class="k-textbox input-sm full-width"
+                      autofocus="autofocus"
+                      tabindex="1"
+                      ng-change="search()"
+                    /><!--</label>-->
+                    <a href="#" class="k-icon k-i-search">&nbsp;</a></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="example_wrapper" class="dataTables_wrapper form-inline">
+            <div class="row margin-top">
+              <div class="col-md-12">
+                <table class="table table-bordered table-hover" id="fixTable">
+                  <thead>
+                    <tr style="background-color: #edefef">
+                      <th class="small-cell v-align-middle" style="z-index: 1">
+                        <div class="checkbox check-success">
+                          <input
+                            id="mainchk"
+                            type="checkbox"
+                            value="1"
+                            ng-click="CheckAllChecked()"
+                          />
+                          <label for="mainchk"></label>
+                        </div>
+                      </th>
+
+                      <!--<th ng-click="orderByField='sort'; reverseSort = !reverseSort">
+                                        <label><b><a href=""><i class="fa fa-sort" ng-if="!orderByField"></i><span ng-show="!reverseSort"><i class="fa fa-caret-up" ng-if="orderByField"></i></span><span ng-show="reverseSort"><i class="fa fa-caret-down"></i></span>&nbsp;{{"Library Bin Code" | translate }}</b></label>
+                                    </th>-->
+
+                      <th
+                        class="bold"
+                        ng-click="sortBy('sims_library_bin_code')"
+                      >
+                        {{"Library Bin Code"| translate }}
+                        <span
+                          class="sortorder"
+                          ng-show="propertyName === 'sims_library_bin_code'"
+                          ng-class="{reverse: reverse}"
+                        ></span>
+                      </th>
+                      <!-- <th>
+                                     <label><b>{{"Description" | translate }}</b></label>
+                         </th>-->
+                      <th
+                        class="bold"
+                        ng-click="sortBy('sims_library_bin_desc')"
+                      >
+                        {{"Description"| translate }}
+                        <span
+                          class="sortorder"
+                          ng-show="propertyName === 'sims_library_bin_desc'"
+                          ng-class="{reverse: reverse}"
+                        ></span>
+                      </th>
+
+                      <!--  <th>
+             <label><b>{{"Location" | translate }}</b></label>
+         </th>-->
+                      <th
+                        class="bold"
+                        ng-click="sortBy('sims_library_location_name')"
+                      >
+                        {{"Location"| translate }}
+                        <span
+                          class="sortorder"
+                          ng-show="propertyName === 'sims_library_location_name'"
+                          ng-class="{reverse: reverse}"
+                        ></span>
+                      </th>
+
+                      <th class="semi-bold">
+                        <label><i class="fa fa-cogs"></i></label>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      ng-repeat="j in filteredTodos | orderBy:propertyName:reverse"
+                      ng-class="row1"
+                      ng-dblclick="edit(airfare)"
+                    >
+                      <td>
+                        <div class="row-fluid">
+                          <div
+                            class="checkbox check-success"
+                            style="height: 20px"
+                          >
+                            <input
+                              id="{{j.sims_library_bin_desc+j.sims_library_bin_code+$index}}"
+                              type="checkbox"
+                              value="1"
+                              ng-click="checkonebyonedelete()"
+                              ng-model="chkb"
+                            />
+                            <label
+                              for="{{j.sims_library_bin_desc+j.sims_library_bin_code+$index}}"
+                            ></label>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <label id="lbl">{{j.sims_library_bin_code}}</label>
+                      </td>
+                      <td>
+                        <label id="Label1">{{j.sims_library_bin_desc}}</label>
+                      </td>
+
+                      <td>
+                        <label id="Label2"
+                          >{{j.sims_library_location_name}}</label
+                        >
+                      </td>
+
+                      <td>
+                        <a href=""
+                          ><i class="fa fa-edit" ng-click="edit(j)"></i
+                        ></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="pull-right">
+                  <paging
+                    class="small"
+                    page="currentPage"
+                    page-size="pageSize"
+                    total="pagersize"
+                    pg-href="#GotoPage-{page}"
+                    dots="{{dots}}"
+                    show-prev-next="{{showPrevNext}}"
+                    scroll-top="{{scrollTop}}"
+                    hide-if-empty="{{hideIfEmpty}}"
+                    ul-class="{{ulClass}}"
+                    active-class="{{activeClass}}"
+                    disabled-class="{{disabledClass}}"
+                    show-first-last="{{showFirstLast}}"
+                    paging-action="DoCtrlPagingAct('Paging Clicked', page, pageSize, totalItems)"
+                    ng-click="index(currentPage)"
+                  >
+                  </paging>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ng-show="display">
+          <form name="Myform" novalidate="novalidate">
+            <!--1ST ROW-->
+            <div class="row">
+              <div
+                class="col-md-2"
+                ng-class="{'has-error': !Myform.lib_location.$valid && (Myform.lib_location.$touched || Myform.$submitted) }"
+              >
+                <label class="semi-bold" for="libcata"
+                  >{{"Library Location"| translate }}<span class="text-red"
+                    >*</span
+                  ></label
+                >
+                <select
+                  id="lib_catalouge"
+                  data-role="dropdownlist"
+                  class="form-control input-sm full-width control1"
+                  name="lib_location"
+                  ng-model="temp.sims_library_location_code"
+                  ng-options="doc.sims_library_location_code as doc.sims_library_location_name for doc in location"
+                  required
+                ></select>
+                <p
+                  class="help-block"
+                  ng-show="Myform.lib_location.$error.required &&  (Myform.lib_location.$touched || Myform.$submitted)"
+                >
+                  This field is required
+                </p>
+              </div>
+              <!-- Library Attribute Code-->
+              <div
+                class="col-md-2"
+                ng-class="{'has-error': !Myform.Lib_Code.$valid && (Myform.Lib_Code.$touched || Myform.$submitted) }"
+              >
+                <label for="DivCode"
+                  >{{"Library Bin Code" |translate}}<span class="text-red"
+                    >*</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  name="Lib_Code"
+                  id="libCode"
+                  class="k-textbox input-sm full-width"
+                  ng-model="temp.sims_library_bin_code"
+                  ng-pattern="/^(\d)+$/"
+                  ng-maxlength="5"
+                  pattern="[A-Za-z\s]+"
+                  ng-readonly="divcode_readonly"
+                  maxlength="3"
+                  required
+                />
+                <p
+                  class="help-block"
+                  ng-show="Myform.Lib_Code.$error.pattern &&  Myform.Lib_Code.$touched (!Myform.$pristine && Myform.$submitted)"
+                >
+                  Please Enter only Digit
+                </p>
+
+                <p
+                  class="help-block"
+                  ng-show="Myform.Lib_Code.$error.required &&  (Myform.Lib_Code.$touched || Myform.$submitted)"
+                >
+                  This field Required
+                </p>
+              </div>
+
+              <!--Library Attribute Name-->
+              <div
+                class="col-md-4"
+                ng-class="{'has-error': !Myform.lib_name.$valid && (Myform.lib_name.$touched || Myform.$submitted) }"
+              >
+                <label for="lib_name"
+                  >{{"Library Bin Description" |translate}}<span
+                    class="text-red"
+                    >*</span
+                  ></label
+                >
+                <input
+                  type="text"
+                  name="lib_name"
+                  id="libname"
+                  class="k-textbox input-sm full-width"
+                  ng-model="temp.sims_library_bin_desc"
+                  maxlength="50"
+                  ng-readonly="gtdreadonly"
+                  required
+                />
+                <p
+                  class="help-block"
+                  ng-show="Myform.lib_name.$error.pattern  &&  (Myform.lib_name.$touched || Myform.$submitted)"
+                >
+                  Please Enter Only Character
+                </p>
+
+                <p
+                  class="help-block"
+                  ng-show="Myform.lib_name.$error.required  &&  (Myform.lib_name.$touched || Myform.$submitted)"
+                >
+                  This Field is Reqiured
+                </p>
+              </div>
+
+              <!--Check box Status-->
+              <!--<div class="col-md-3 row-md-5">
+                                <label id="Label10" for="txt_Status" class="form-label">{{"Status"| translate }}</label>
+                                <div class="checkbox check-success">
+                                    <input id="chk_term2" type="checkbox" ng-model="temp.sims_library_attribute_status">
+                                    <label for="chk_term2"></label>
+                                </div>
+                            </div>-->
+              <div class="col-md-4">
+                <label>&nbsp;</label>
+                <div class="pull-left">
+                  <button
+                    type="submit"
+                    id="desigsub"
+                    ng-click="savedata(Myform.$valid)"
+                    ng-show="save_btn"
+                    class="btn btn-primary btn-small"
+                  >
+                    {{"Save" | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    ng-show="Update_btn"
+                    ng-click="update(Myform.$valid);"
+                    class="btn btn-primary btn-small"
+                  >
+                    {{"Update" | translate }}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-small"
+                    ng-click="Cancel();"
+                  >
+                    {{"Cancel"| translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!--<div class="form-actions">
+                        <div class="pull-right">
+                            <button type="submit" id="desigsub" ng-show="save_btn" class="btn btn-primary btn-cons">{{"Save" | translate }}</button>
+                            <button type="button" ng-show="Update_btn" ng-click="update(Myform.$valid);" class="btn btn-primary btn-cons">{{"Update" | translate }}</button>
+                            <button type="button" class="btn btn-white btn-cons" ng-click="Cancel();">{{"Cancel"| translate }}</button>
+                        </div>
+                    </div>-->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/tableHeadFixer.js"></script>
